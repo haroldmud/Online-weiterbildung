@@ -12,3 +12,14 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Formation {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image       String
+  price       Float
+  wholesalePrice Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

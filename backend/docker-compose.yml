@@ -1,13 +1,12 @@
 # docker-compose.yml
 
-version: '3.8'
 services:
   postgres:
     image: postgres:13.5
     restart: always
     environment:
-      - POSTGRES_USER=recipe
-      - POSTGRES_PASSWORD=RecipePassword
+      - POSTGRES_USER=formation
+      - POSTGRES_PASSWORD=formationPassword
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
