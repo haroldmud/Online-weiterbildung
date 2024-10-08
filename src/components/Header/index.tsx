@@ -9,7 +9,7 @@ const Header =()=> {
 
   useEffect(() => {
     const handleScroll = () => {
-      if(window.scrollY < 400){
+      if(window.scrollY < 600){
         setShow(true);
       }else{
         setShow(false);

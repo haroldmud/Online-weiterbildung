@@ -13,6 +13,7 @@ const Content = () => {
                 key={item.id}
                 image={item.image}
                 price={item.price}
+                wholesalePrice={item.wholesalePrice}
                 title={item.title}
                 desciption={item.description}
               />
@@ -23,6 +24,7 @@ const Content = () => {
                 key={item.id}
                 image={item.image}
                 price={item.price}
+                wholesalePrice={item.wholesalePrice}
                 title={item.title}
                 desciption={item.description}
               />
