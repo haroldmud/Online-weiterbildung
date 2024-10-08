@@ -1,16 +1,38 @@
+"use client"
+
 import Card from "../ui/Card";
 import CardReversed from "../ui/CardReversed";
-import { data } from "@/helpers/data";
+import { CreateFormationDto } from "../../../backend/src/formation/dto/create-formation.dto";
+import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, useEffect, useState } from "react";
 
 const Content = () => {
+  const [formation, setFormation] = useState<CreateFormationDto[] | []>([]);
+
+  useEffect(() => {
+    try{
+      const featchData = async () => {
+        const response = await fetch('http://localhost:3000/formation');
+        if(!response.ok){
+          throw new Error('Something went wrong')
+        }
+        const data = await response.json();
+        setFormation(data);
+      }
+
+      featchData()
+    } catch(error){
+      console.log(error)
+    }
+  }, [])
+
   return (
     <section>
       {
-        data.map((item, index) => {
+        formation.map((item, index) => {
           if(index % 2 === 0) {
             return (
               <Card
-                key={item.id}
+                key={index}
                 image={item.image}
                 price={item.price}
                 wholesalePrice={item.wholesalePrice}
@@ -21,7 +43,7 @@ const Content = () => {
           } else {
             return (
               <CardReversed
-                key={item.id}
+                key={index}
                 image={item.image}
                 price={item.price}
                 wholesalePrice={item.wholesalePrice}
