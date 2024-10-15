@@ -1,12 +1,13 @@
 import Link from "next/link";
 
 type ButtonProps = {
-  name: string 
+  name: string,
+  route: string
 }
 
-const Button: React.FC<ButtonProps> = ({ name }) => {
+const Button: React.FC<ButtonProps> = ({ name, route }) => {
   return (
-    <Link href="/" className="text-white bg-red-600 rounded-sm text-sm px-4 py-2  right-8">{name}</Link>
+    <Link href={route} className="text-white bg-red-600 rounded-sm text-sm px-4 py-2  right-8">{name}</Link>
 
   );
 }

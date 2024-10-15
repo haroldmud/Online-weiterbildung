@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import Button from "./Button";
 
 const Card = (props: {
-  [x: string]: ReactNode; image: string | undefined; 
+  [x: string]: ReactNode; image: string | undefined; route: string;
 }) => {
   return (
     <section>
@@ -16,7 +16,7 @@ const Card = (props: {
             <a href="#" className="text-4xl hover:underline">{props.title}</a>
             <p>{props.desciption}</p>
             <div>
-              <Button name="Accedez à la formation"/>
+              <Button route={props.route} name="Accedez à la formation"/>
             </div>
           </div>
         </div>

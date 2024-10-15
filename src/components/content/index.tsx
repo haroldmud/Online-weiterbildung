@@ -5,8 +5,12 @@ import CardReversed from "../ui/CardReversed";
 import { CreateFormationDto } from "../../../backend/src/formation/dto/create-formation.dto";
 import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, useEffect, useState } from "react";
 
+interface CreateFormationExtended extends CreateFormationDto {
+  id: string;
+};
+
 const Content = () => {
-  const [formation, setFormation] = useState<CreateFormationDto[] | []>([]);
+  const [formation, setFormation] = useState<CreateFormationExtended[] | []>([]);
 
   useEffect(() => {
     try{
@@ -38,6 +42,7 @@ const Content = () => {
                 wholesalePrice={item.wholesalePrice}
                 title={item.title}
                 desciption={item.description}
+                route={`formation/${item.id}`}
               />
             )
           } else {
@@ -49,6 +54,7 @@ const Content = () => {
                 wholesalePrice={item.wholesalePrice}
                 title={item.title}
                 desciption={item.description}
+                route={`formation/${item.id}`}
               />
             )
           }

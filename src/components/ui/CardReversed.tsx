@@ -2,7 +2,7 @@ import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedRea
 import Button from "./Button";
 
 const CardReversed = (props: {
-  [x: string]: ReactNode; image: string | undefined; price: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; title: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; desciption: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; 
+  [x: string]: ReactNode; image: string | undefined; price: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; title: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; desciption: string | number | bigint | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<AwaitedReactNode> | null | undefined; route: string; 
 }) => {
   return (
     <section>
@@ -13,7 +13,7 @@ const CardReversed = (props: {
             <a href="#" className="text-4xl hover:underline">{props.title}</a>
             <p>{props.desciption}</p>
             <div>
-              <Button name="Accedez à la formation"/>
+              <Button route={props.route} name="Accedez à la formation"/>
             </div>
           </div>
         </div>
