@@ -1,11 +1,15 @@
 "use client"
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { CreateFormationDto } from "../../../../backend/src/formation/dto/create-formation.dto"
+import { IoIosArrowRoundBack } from "react-icons/io";
+
 
 const FormationDetails = ({params}: {
     params: {formationId: string}
 }) => {
     const [formation, setFormation] = useState<CreateFormationDto | null>(null);
+    const router = useRouter();
     useEffect(() => {
         try{
             const fetchOneDate = async () => {
@@ -24,6 +28,9 @@ const FormationDetails = ({params}: {
     return (
         <section>
         <div className="flex flex-col gap-4 mt-8 ">
+            <button onClick={()=> router.back()} className="text-4xl font-bold">
+              <IoIosArrowRoundBack />
+            </button>
           <div className="py-10 w-9/12">
             <a href="#" className="text-4xl hover:underline">{formation?.title}</a>
             <img className="h-[22rem] w-full object-cover rounded-md" src={formation?.image} alt="content image" />
