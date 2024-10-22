@@ -1,4 +1,4 @@
-import { IsString } from '@nestjs/class-validator';
+import { IsOptional, IsString } from '@nestjs/class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -7,6 +7,7 @@ export class CreateUserDto {
   readonly email: string;
   @IsString()
   password: string;
+  @IsOptional()
   @IsString()
-  readonly role: string;
+  readonly role?: string;
 }

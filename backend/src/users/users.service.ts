@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -10,12 +10,16 @@ export const roundOfHashing = 10;
 export class UsersService {
   constructor(private prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
-    createUserDto.password = await bcrypt.hash(
-      createUserDto.password,
-      roundOfHashing,
-    );
-
-    return this.prisma.user.create({ data: createUserDto });
+    try {
+      createUserDto.password = await bcrypt.hash(
+        createUserDto.password,
+        roundOfHashing,
+      );
+      return this.prisma.user.create({ data: createUserDto });
+    } catch (e) {
+      console.error('Error:', e);
+      throw new InternalServerErrorException('user creation failed');
+    }
   }
 
   findAll() {

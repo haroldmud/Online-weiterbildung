@@ -1,5 +1,5 @@
 "use client"
-
+ 
 import Card from "../ui/Card";
 import CardReversed from "../ui/CardReversed";
 import { CreateFormationDto } from "../../../backend/src/formation/dto/create-formation.dto";
