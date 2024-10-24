@@ -27,7 +27,7 @@ const Header =()=> {
     <header className={`bg-black h-12 flex justify-center ${show && "sticky"}  top-0 z-50`} >
       <div className="max-w-[1000px] w-full relative flex items-center">
         <div className="w-full absolute flex justify-end">
-          <Button route="/" name="Se connecter"/>
+          <Button route="/auth/login" name="Se connecter"/>
         </div>
       </div>
     </header>

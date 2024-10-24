@@ -1,4 +1,3 @@
-import Button from "../ui/Button";
 const Footer =()=> {
   return (
     <header className="bg-black h-12 flex justify-center py-10">
