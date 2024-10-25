@@ -3,21 +3,34 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { CreateFormationDto } from "../../../../backend/src/formation/dto/create-formation.dto"
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 
-const FormationDetails = ({params}: {
+const FormationDetails = ({params: initialParams}: {
     params: {formationId: string}
 }) => {
     const [formation, setFormation] = useState<CreateFormationDto | null>(null);
+    const [formationId, setFormationId] = useState<string | null>(null);
     const router = useRouter();
     useEffect(() => {
+      const fetchParams = async () => {
+        const resolveParams = await initialParams;
+        setFormationId(resolveParams.formationId);
+      }
+      fetchParams();
+    },[initialParams])
+    useEffect(() => {
         try{
+            const token = localStorage.getItem('token');
+            if(!token) {
+                router.push('/auth/login');
+            }
             const fetchOneDate = async () => {
-                const response = await fetch(`http://localhost:3000/formation/${params.formationId}`, {
+                const response = await fetch(`http://localhost:3000/formation/${formationId}`, {
                   method: 'GET',
                   headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` || '',
+                    'Authorization': `Bearer ${token}` || '',
                   },
                 });
                 if(!response.ok) {
@@ -25,12 +38,14 @@ const FormationDetails = ({params}: {
                 }
                 const data =  await response.json();
                 setFormation(data);
+                console.log('Data:', data);
+                console.log(token)
             }
             fetchOneDate();
         } catch(error) {
             console.error("This is what's going wrong:",error);
         }
-    },[params.formationId])
+    },[formationId])
     return (
         <section>
         <div className="flex flex-col gap-4 mt-8 ">

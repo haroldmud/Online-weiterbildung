@@ -18,6 +18,7 @@ export class FormationService {
   }
 
   findOne(id: string) {
+    console.log('waesrdtfyghujkl,mkjhgfdseawsdfghjkmnjbhgvfds');
     return this.prisma.formation.findUnique({
       where: { id },
     });

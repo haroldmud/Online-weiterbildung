@@ -26,6 +26,7 @@ export default function Login() {
       localStorage.setItem('token', data.accessToken);
       console.log('username:', username);
       console.log('Password:', password);
+      console.log('Data:', data);
     }catch(e){
       console.error('Error:', e);
     }

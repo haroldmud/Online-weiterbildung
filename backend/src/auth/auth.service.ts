@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -21,9 +21,9 @@ export class AuthService {
           `User not found for username: ${username}`,
         );
       }
-      const userPwd = await bcrypt.compare(password, user.password);
-      if (userPwd) {
-        return new UnauthorizedException('Invalid password');
+      const userPwd = bcrypt.compare(password, user.password);
+      if (!userPwd) {
+        return new BadRequestException('Password does not match');
       }
 
       return {
