@@ -23,7 +23,7 @@ export default function Login() {
         body: JSON.stringify({ username, password }),
       })
       const data =  await response.json();
-      console.log('Data:', data);
+      localStorage.setItem('token', data.accessToken);
       console.log('username:', username);
       console.log('Password:', password);
     }catch(e){

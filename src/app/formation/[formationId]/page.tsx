@@ -13,7 +13,13 @@ const FormationDetails = ({params}: {
     useEffect(() => {
         try{
             const fetchOneDate = async () => {
-                const response = await fetch(`http://localhost:3000/formation/${params.formationId}`);
+                const response = await fetch(`http://localhost:3000/formation/${params.formationId}`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` || '',
+                  },
+                });
                 if(!response.ok) {
                     console.error('Something went wrong');
                 }
@@ -24,7 +30,7 @@ const FormationDetails = ({params}: {
         } catch(error) {
             console.error("This is what's going wrong:",error);
         }
-    },[])
+    },[params.formationId])
     return (
         <section>
         <div className="flex flex-col gap-4 mt-8 ">
