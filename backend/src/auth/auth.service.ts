@@ -13,6 +13,16 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
+
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({ where: { username } });
+    if (user && bcrypt.compare(password, user.password)) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   async login(username: string, password: string) {
     try {
       const user = await this.prisma.user.findUnique({ where: { username } });
