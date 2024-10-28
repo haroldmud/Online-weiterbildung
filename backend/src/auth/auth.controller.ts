@@ -17,4 +17,13 @@ export class AuthController {
     const hashedPassword = await bcrypt.hash(password, 10);
     return this.authService.login(username, hashedPassword);
   }
+
+  @Post('register')
+  @ApiOkResponse({ type: AuthEntity })
+  async register(
+    @Body() req: { username: string; email: string; password: string },
+  ) {
+    const { username, email, password } = req;
+    return this.authService.register(username, email, password);
+  }
 }

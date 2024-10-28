@@ -14,9 +14,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<{ username: string } | null> {
     const user = await this.prisma.user.findUnique({ where: { username } });
     if (user && bcrypt.compare(password, user.password)) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
@@ -39,6 +43,26 @@ export class AuthService {
       return {
         accessToken: this.jwtService.sign({ username }),
       };
+    } catch (e) {
+      console.error('Error:', e);
+    }
+  }
+
+  async register(username: string, email: string, passWord: string) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(passWord, salt);
+      const user = await this.prisma.user.create({
+        data: {
+          username,
+          email,
+          password: hashedPassword,
+        },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
     } catch (e) {
       console.error('Error:', e);
     }
