@@ -1,11 +1,12 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { AuthEntity } from './entity/auth.entity';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,10 @@ export class AuthService {
     return null;
   }
 
-  async login(username: string, password: string) {
+  async login(
+    username: string,
+    password: string,
+  ): Promise<AuthEntity | NotFoundException | UnauthorizedException> {
     try {
       const user = await this.prisma.user.findUnique({ where: { username } });
       if (!user) {
@@ -37,11 +41,11 @@ export class AuthService {
       }
       const userPwd = bcrypt.compare(password, user.password);
       if (!userPwd) {
-        return new BadRequestException('Password does not match');
+        return new UnauthorizedException('Password does not match');
       }
 
       return {
-        accessToken: this.jwtService.sign({ username }),
+        accessToken: this.jwtService.sign({ userId: user.id }),
       };
     } catch (e) {
       console.error('Error:', e);
