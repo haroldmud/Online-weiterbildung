@@ -23,11 +23,12 @@ export default function Login() {
         },
         body: JSON.stringify({ username, password }),
       })
+      if (!response.ok) {
+        console.error('Something went wrong, status:', response.status);
+        return;
+      }
       const data =  await response.json();
       localStorage.setItem('token', data.accessToken);
-      console.log('username:', username);
-      console.log('Password:', password);
-      console.log('Data:', data);
     }catch(e){
       console.error('Error:', e);
     }
