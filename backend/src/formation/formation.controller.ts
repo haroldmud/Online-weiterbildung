@@ -10,13 +10,9 @@ import {
 import { FormationService } from './formation.service';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
-<<<<<<< HEAD
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-=======
-import { ApiBearerAuth } from '@nestjs/swagger';
->>>>>>> feat: seperating frontend sub-repo from backend for a smooth deployment
 
 @Controller('formation')
 export class FormationController {
@@ -39,12 +35,9 @@ export class FormationController {
   }
 
   @Get(':id')
-<<<<<<< HEAD
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: CreateFormationDto, description: 'Formation found' })
-=======
->>>>>>> feat: seperating frontend sub-repo from backend for a smooth deployment
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
   findOne(@Param('id') id: string) {
     return this.formationService.findOne(id);
   }

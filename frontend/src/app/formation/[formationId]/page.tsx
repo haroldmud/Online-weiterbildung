@@ -18,9 +18,10 @@ const FormationDetails = ({ params }: FormationDetailsProps) => {
   const router = useRouter();
 
   useEffect(() => {
-    const unwrapParams = async () => {
-      const unwrappedParams = params;
+    const unwrapParams = async() => {
+      const unwrappedParams = await params;
       setFormationId(unwrappedParams.formationId);
+      console.log('Unwrapped params:', unwrappedParams);
     };
     unwrapParams();
   }, [params]);
