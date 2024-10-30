@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
+import { IoIosArrowRoundBack } from 'react-icons/io';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -21,7 +22,10 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
+      <a href="/" className="text-4xl font-bold absolute top-4 left-4 flex" title="Go back">
+          <IoIosArrowRoundBack />
+        </a>
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
         <form onSubmit={handleSubmit}>
