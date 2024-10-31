@@ -34,15 +34,12 @@ export class AuthService {
   ): Promise<AuthEntity | NotFoundException | UnauthorizedException> {
     try {
       const user = await this.prisma.user.findUnique({ where: { username } });
-      if (!user) {
-        return new NotFoundException(
-          `User not found for username: ${username}`,
-        );
-      }
+
+      if (!user)
+        new NotFoundException(`User not found for username: ${username}`);
+
       const userPwd = bcrypt.compare(password, user.password);
-      if (!userPwd) {
-        return new UnauthorizedException('Password does not match');
-      }
+      if (!userPwd) return new UnauthorizedException('Password does not match');
 
       return {
         accessToken: this.jwtService.sign({ userId: user.id }),

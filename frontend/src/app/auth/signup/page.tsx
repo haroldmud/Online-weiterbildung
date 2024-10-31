@@ -13,6 +13,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const router = useRouter();
 
   const fetchSignUp = async (username: string, email:string, password: string) => {
     try{
@@ -26,6 +27,8 @@ export default function SignUp() {
       if (!response.ok) {
         console.error('Something went wrong, status:', response.status);
         return;
+      } else {
+        router.push('/auth/login');
       }
       const data = await response.json();
       console.log(data)
@@ -34,23 +37,21 @@ export default function SignUp() {
       console.error('Error:', e);
     }
   }
-
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  
+  const handleSubmit = async(e: { preventDefault: () => void; }) => {
     e.preventDefault();
     (password !== confirmPassword) ? setPasswordMatchError(true) : setPasswordMatchError(false);
     try{
-      fetchSignUp(username, email, password);
-      const router = useRouter();
-      router.push('/auth/login');
+      !passwordMatchError && await fetchSignUp(username, email, password);
     } catch(e){
       console.error('Error:', e);
     }
   };
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   }
-
+  
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   }
