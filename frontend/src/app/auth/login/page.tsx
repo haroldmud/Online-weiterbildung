@@ -3,11 +3,18 @@ import { useState } from 'react';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { useRouter } from 'next/navigation';
+import useStore from '@/zustand/store';
+import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const Logged = useStore(state => state.isLogged);
+  const logginin = useStore(state => state.signinIn);
+  const router = useRouter();
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -16,7 +23,7 @@ export default function Login() {
   const handleSubmit = async (e:  { preventDefault: () => void; }) => {
     e.preventDefault();
     try{
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('http://localhost:3001/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,6 +36,9 @@ export default function Login() {
       }
       const data =  await response.json();
       localStorage.setItem('token', data.accessToken);
+      console.log(data);
+      console.log(Logged)
+      if(data.accessToken) {router.push("/"); logginin()}
     }catch(e){
       console.error('Error:', e);
     }
@@ -37,8 +47,8 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
       <a href="/" className="text-4xl font-bold absolute top-4 left-4 flex" title="Go back">
-          <IoIosArrowRoundBack />
-        </a>
+        <IoIosArrowRoundBack />
+      </a>
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit}>
