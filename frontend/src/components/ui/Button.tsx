@@ -7,7 +7,7 @@ type ButtonProps = {
 
 const Button: React.FC<ButtonProps> = ({ name, route }) => {
   return (
-    <Link href={route} className="text-white bg-red-600 rounded-sm text-sm px-4 py-2  right-8">{name}</Link>
+    <Link href={route} className="text-white bg-red-600 rounded-sm text-sm px-4 py-2  right-8 hover:bg-red-500">{name}</Link>
 
   );
 }
