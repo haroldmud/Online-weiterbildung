@@ -9,6 +9,7 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passTester, setPassTester] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -17,6 +18,11 @@ export default function SignUp() {
 
   const fetchSignUp = async (username: string, email:string, password: string) => {
     try{
+      if(!passwordMatchError) {
+        setPassword(passTester)
+      } else {
+        return;
+      }
       const response = await fetch('http://localhost:3001/users', {
         method: 'POST',
         headers: {
@@ -27,11 +33,8 @@ export default function SignUp() {
       if (!response.ok) {
         console.error('Something went wrong, status:', response.status);
         return;
-      } else {
-        router.push('/auth/login');
       }
       const data = await response.json();
-      console.log(data)
       return data;
     }catch(e){
       console.error('Error:', e);
@@ -96,10 +99,11 @@ export default function SignUp() {
             </label>
             <div className="relative">
               <input
-                id="password"
+                id="password1"
+                placeholder='password'
                 type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={passTester}
+                onChange={(e) => setPassTester(e.target.value)}
                 className={`mt-1 p-2 w-full border ${passwordMatchError ? "border-red-500" :"border-gray-300"} rounded focus:outline-none focus:ring-2 focus:ring-black`}
                 required
               />
@@ -119,7 +123,8 @@ export default function SignUp() {
             </label>
             <div className="relative">
               <input
-                id="password"
+                id="password2"
+                placeholder='confirm password'
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}

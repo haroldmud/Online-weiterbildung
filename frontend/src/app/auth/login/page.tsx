@@ -63,6 +63,7 @@ export default function Login() {
             <div className='relative'>
               <input
                 id="password"
+                placeholder='password'
                 type={`${showPassword? "text": "password"}`}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

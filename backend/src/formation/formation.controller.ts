@@ -6,14 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { FormationService } from './formation.service';
 import { CreateFormationDto } from './dto/create-formation.dto';
 import { UpdateFormationDto } from './dto/update-formation.dto';
-// import { UseGuards } from '@nestjs/common';
-// import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiTags('formation')
 @Controller('formation')
 export class FormationController {
   constructor(private readonly formationService: FormationService) {}
@@ -35,9 +36,9 @@ export class FormationController {
   }
 
   @Get(':id')
-  // @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: CreateFormationDto, description: 'Formation found' })
-  // @ApiBearerAuth()
   findOne(@Param('id') id: string) {
     return this.formationService.findOne(id);
   }

@@ -38,7 +38,7 @@ export class AuthService {
       if (!user)
         new NotFoundException(`User not found for username: ${username}`);
 
-      const userPwd = bcrypt.compare(password, user.password);
+      const userPwd = password === user.password;
       if (!userPwd) return new UnauthorizedException('Password does not match');
 
       return {
