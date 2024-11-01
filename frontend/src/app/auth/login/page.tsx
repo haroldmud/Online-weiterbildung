@@ -26,8 +26,9 @@ export default function Login() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: encodeURIComponent(username), password: encodeURIComponent(password) }),
       })
       if (!response.ok) {
         console.error('Something went wrong, status:', response.status);
