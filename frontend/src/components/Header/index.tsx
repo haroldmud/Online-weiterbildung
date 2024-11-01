@@ -3,6 +3,7 @@
 import Button from "../ui/Button";
 import { useEffect, useRef, useState } from "react";
 import useStore from "@/zustand/store";
+import { useRouter } from "next/navigation";
 
 const Header =()=> {
   const menuRef = useRef(null); 
@@ -12,12 +13,14 @@ const Header =()=> {
   const isLogged = useStore(state => state.isLogged);
   const isLoggedOut = useStore(state => state.signOut);
   const isLoogedIn = useStore(state => state.signinIn);
+  const router = useRouter();
 
   const loggout = () => {
     isLoggedOut();
+    router.push('/');
     localStorage.removeItem('token');
   }
-  
+
   useEffect(() => {
     if(localStorage.getItem('token')){
       isLoogedIn();

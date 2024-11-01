@@ -14,7 +14,6 @@ export default function Login() {
   const logginin = useStore(state => state.signinIn);
   const router = useRouter();
   
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   }
@@ -28,7 +27,7 @@ export default function Login() {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify({ username: encodeURIComponent(username), password: encodeURIComponent(password) }),
+        body: JSON.stringify({ username, password }),
       })
       if (!response.ok) {
         console.error('Something went wrong, status:', response.status);
