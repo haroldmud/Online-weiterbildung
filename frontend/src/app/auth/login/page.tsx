@@ -5,7 +5,6 @@ import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useRouter } from 'next/navigation';
 import useStore from '@/zustand/store';
-import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
 
 export default function Login() {
   const [username, setUsername] = useState('');
