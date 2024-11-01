@@ -20,6 +20,18 @@ const Header =()=> {
     router.push('/');
     localStorage.removeItem('token');
   }
+  
+  const featchUsername = async () => {
+    const response = await fetch('http://localhost:3000/api/users', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    const data = await response.json();
+    const username = data.filter((user: any) => user.username === localStorage.getItem('username'));
+  }
 
   useEffect(() => {
     if(localStorage.getItem('token')){

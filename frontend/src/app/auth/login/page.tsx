@@ -35,6 +35,7 @@ export default function Login() {
       }
       const data =  await response.json();
       localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('username', username);
       console.log(data);
       console.log(Logged)
       if(data.accessToken) {router.push("/"); logginin()}

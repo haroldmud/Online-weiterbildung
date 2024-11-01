@@ -22,6 +22,14 @@ export class UsersService {
     }
   }
 
+  async findByUsername(username: string): Promise<CreateUserDto> {
+    const user = await this.prisma.user.findUnique({ where: { username } });
+    if (!user) {
+      throw new InternalServerErrorException('user not found');
+    }
+    return user;
+  }
+
   findAll() {
     return this.prisma.user.findMany();
   }
