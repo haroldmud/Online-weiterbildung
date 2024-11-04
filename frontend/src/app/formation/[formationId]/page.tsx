@@ -64,7 +64,7 @@ const FormationDetails = ({ params }: FormationDetailsProps) => {
       {error ? (
         <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg flex flex-col items-center gap-2">
           <MdErrorOutline className="text-6xl" />
-          <p className="text-lg font-semibold">{error}</p>
+          <p className="text-lg font-semibold">{error} or you are not <mark className="inline">logged in</mark> yet!</p>
           <a
             href="/"
             className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
