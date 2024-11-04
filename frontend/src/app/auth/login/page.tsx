@@ -11,7 +11,8 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const Logged = useStore(state => state.isLogged);
-  const logginin = useStore(state => state.signinIn);
+  const loggininStore = useStore(state => state.signinIn);
+  const setUsernameStore = useStore(state => state.setUsername);
   const router = useRouter();
   
   const togglePasswordVisibility = () => {
@@ -36,9 +37,11 @@ export default function Login() {
       const data =  await response.json();
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('username', username);
+      const getUsername: string | null = localStorage.getItem('username');
+      setUsernameStore(getUsername || '');
       console.log(data);
       console.log(Logged)
-      if(data.accessToken) {router.push("/"); logginin()}
+      if(data.accessToken) {router.push("/"); loggininStore()}
     }catch(e){
       console.error('Error:', e);
     }

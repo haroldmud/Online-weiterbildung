@@ -14,38 +14,57 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordMatchError, setPasswordMatchError] = useState(false);
+  const [error, setError] = useState(false);
   const router = useRouter();
 
   const fetchSignUp = async (username: string, email:string, password: string) => {
+    // (password !== confirmPassword) ? setPasswordMatchError(true) : setPasswordMatchError(false);
     try{
-      if(!passwordMatchError) {
+      if(passTester === confirmPassword){
+        setPasswordMatchError(false)
         setPassword(passTester)
-      } else {
+        console.log(password, passTester, confirmPassword)
+      }else{
+        setPasswordMatchError(true)
         return;
       }
-      const response = await fetch('http://localhost:3001/users', {
-        method: 'POST',
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({username, email, password}),
-      })
-      if (!response.ok) {
-        console.error('Something went wrong, status:', response.status);
-        return;
+      if(password){
+        const response = await fetch('http://localhost:3001/users', {
+          method: 'POST',
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({username, email, password}),
+        })
+        if (!response.ok) {
+          setError(true);
+          console.error('Something went wrong, status:', response.status);
+          return;
+        }
+        const data = await response.json();
+        return data;
       }
-      const data = await response.json();
-      return data;
+      //  else {
+      //   setPasswordMatchError(true)
+      //   setError(true);
+      //   return;
+      // }
     }catch(e){
+      setError(true);
       console.error('Error:', e);
     }
   }
   
   const handleSubmit = async(e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    (password !== confirmPassword) ? setPasswordMatchError(true) : setPasswordMatchError(false);
     try{
-      !passwordMatchError && await fetchSignUp(username, email, password);
+      if(!passwordMatchError){
+        await fetchSignUp(username, email, password)
+        console.log(password, passTester, confirmPassword)
+        if(!error && password){
+          router.push('/auth/login');
+        }
+      };
     } catch(e){
       console.error('Error:', e);
     }
@@ -66,6 +85,7 @@ export default function SignUp() {
         </a>
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        {error && <p className="text-red-500 text-sm mb-4">Something went wrong. Please try again.</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
