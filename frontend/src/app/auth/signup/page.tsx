@@ -4,67 +4,47 @@ import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
+import { generateIdentifier } from '@/helpers/identifier';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [passTester, setPassTester] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
   const [error, setError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
   const router = useRouter();
 
-  const fetchSignUp = async (username: string, email:string, password: string) => {
-    // (password !== confirmPassword) ? setPasswordMatchError(true) : setPasswordMatchError(false);
-    try{
-      if(passTester === confirmPassword){
-        setPasswordMatchError(false)
-        setPassword(passTester)
-        console.log(password, passTester, confirmPassword)
-      }else{
-        setPasswordMatchError(true)
-        return;
-      }
-      if(password){
+  const fetchSignUp = async (id: string, username: string, email:string, password: string) => {
         const response = await fetch('http://localhost:3001/users', {
           method: 'POST',
           headers: {
             "content-type": "application/json",
           },
-          body: JSON.stringify({username, email, password}),
+          body: JSON.stringify({id, username, email, password}),
         })
         if (!response.ok) {
-          setError(true);
           console.error('Something went wrong, status:', response.status);
           return;
         }
         const data = await response.json();
+        console.log("everything was successful", data);
         return data;
-      }
-      //  else {
-      //   setPasswordMatchError(true)
-      //   setError(true);
-      //   return;
-      // }
-    }catch(e){
-      setError(true);
-      console.error('Error:', e);
-    }
   }
   
   const handleSubmit = async(e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try{
-      if(!passwordMatchError){
-        await fetchSignUp(username, email, password)
-        console.log(password, passTester, confirmPassword)
-        if(!error && password){
-          router.push('/auth/login');
-        }
-      };
+      if(passTester === confirmPassword){
+        await fetchSignUp(generateIdentifier(), username, email, passTester)
+      }else {
+        setPasswordError(true);
+        console.log('Passwords do not match');
+        return;
+      }
     } catch(e){
       console.error('Error:', e);
     }
@@ -85,7 +65,6 @@ export default function SignUp() {
         </a>
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-        {error && <p className="text-red-500 text-sm mb-4">Something went wrong. Please try again.</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
@@ -94,6 +73,7 @@ export default function SignUp() {
             <input
               id="username"
               type="text"
+              placeholder='john_doe'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="mt-1 p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
@@ -107,6 +87,7 @@ export default function SignUp() {
             <input
               id="email"
               type="email"
+              placeholder='joedoe@myemail.com'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`mt-1 p-2 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black`}
@@ -124,7 +105,7 @@ export default function SignUp() {
                 type={showPassword ? "text" : "password"}
                 value={passTester}
                 onChange={(e) => setPassTester(e.target.value)}
-                className={`mt-1 p-2 w-full border ${passwordMatchError ? "border-red-500" :"border-gray-300"} rounded focus:outline-none focus:ring-2 focus:ring-black`}
+                className={`mt-1 p-2 w-full border ${passwordError ? "border-red-500" : "border-gray-300"} rounded focus:outline-none focus:ring-2 focus:ring-black`}
                 required
               />
               <button
@@ -135,7 +116,6 @@ export default function SignUp() {
                 {showPassword ? <FaRegEye /> : <IoEyeOffOutline />}
               </button>
             </div>
-            {passwordMatchError && <p className='text-sm italic text-red-500 font-thin'>unmatched passwords</p>}
           </div>
           <div className="mb-6">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
@@ -148,7 +128,7 @@ export default function SignUp() {
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`mt-1 p-2 w-full border ${passwordMatchError ? "border-red-500": "border-gray-300"} rounded focus:outline-none focus:ring-2 focus:ring-black`}
+                className={`mt-1 p-2 w-full border ${passwordError ? "border-red-500" : "border-gray-300"} rounded focus:outline-none focus:ring-2 focus:ring-black`}
                 required
               />
               <button
@@ -159,7 +139,7 @@ export default function SignUp() {
                 {showConfirmPassword ? <FaRegEye /> : <IoEyeOffOutline />}
               </button>
             </div>
-            {passwordMatchError && <p className='text-sm italic text-red-500 font-thin'>unmatched passwords</p>}
+            {passwordError && <p className="text-red-500 text-xs italic">Passwords do not match</p>}
           </div>
           <button
             type="submit"
