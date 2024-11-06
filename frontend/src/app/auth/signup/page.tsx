@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from 'react-icons/io';
@@ -15,10 +15,22 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  const [passwordCondition, setPasswordCondition] = useState(false);
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  const hasDigit = /(?=.*\d)/;
+  const [digit, setDigit] = useState(false);
+  const hasLowercase = /(?=.*[a-z])/;
+  const [lowercase, setLowercase] = useState(false);
+  const hasUppercase = /(?=.*[A-Z])/;
+  const [uppercase, setUppercase] = useState(false);
+  const hasLetter = /(?=.*[a-zA-Z])/;
+  const [letter, setLetter] = useState(false);
+  const minLength = /.{8,}/;     
+  const [length, setLength] = useState(false);
   const router = useRouter();
 
   const fetchSignUp = async (id: string, username: string, email:string, password: string) => {
+    try {
         const response = await fetch('http://localhost:3001/users', {
           method: 'POST',
           headers: {
@@ -28,12 +40,27 @@ export default function SignUp() {
         })
         if (!response.ok) {
           console.error('Something went wrong, status:', response.status);
+          setError(true)
           return;
         }
         const data = await response.json();
         console.log("everything was successful", data);
         return data;
+    } catch (e) {
+        console.error('Error:', e);
+      }
   }
+
+  useEffect(() => {
+    if(error){
+     setTimeout(() => {
+        setError(false)
+      }, 5000);
+    }
+    return () => clearTimeout(setTimeout(() => {
+      setError(false)
+    }, 5000));
+  },[error])
   
   const handleSubmit = async(e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -48,6 +75,19 @@ export default function SignUp() {
     } catch(e){
       console.error('Error:', e);
     }
+  };
+
+  const handlePasswordChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    const value = e.target.value;
+    setPassTester(value);
+  
+    setDigit(hasDigit.test(value as string));
+    setLowercase(hasLowercase.test(value as string));
+    setUppercase(hasUppercase.test(value as string));
+    setLetter(hasLetter.test(value as string));
+    setLength(minLength.test(value as string));
+
+    setPasswordCondition(!passwordRegex.test(value as string) && value !== '');
   };
   
   const togglePasswordVisibility = () => {
@@ -65,6 +105,7 @@ export default function SignUp() {
         </a>
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        {error && <p className="text-red-500 text-xs italic">This user alredy exists, please try again!</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
@@ -104,7 +145,7 @@ export default function SignUp() {
                 placeholder='password'
                 type={showPassword ? "text" : "password"}
                 value={passTester}
-                onChange={(e) => setPassTester(e.target.value)}
+                onChange={(e) => handlePasswordChange(e)}
                 className={`mt-1 p-2 w-full border ${passwordError ? "border-red-500" : "border-gray-300"} rounded focus:outline-none focus:ring-2 focus:ring-black`}
                 required
               />
@@ -116,6 +157,16 @@ export default function SignUp() {
                 {showPassword ? <FaRegEye /> : <IoEyeOffOutline />}
               </button>
             </div>
+            <p className={`text-xs italic ${!digit ? 'text-red-500' : !lowercase ? 'text-orange-500' : !uppercase ? 'text-blue-500' : !length ? 'text-green-500' : 'text-black'}`}>
+              { 
+                passTester === '' ? '' :
+                !digit ? 'At least one digit required' :
+                !lowercase ? 'At least one lowercase letter required' :
+                !uppercase ? 'At least one uppercase letter required' :
+                !length ? 'At least 8 characters required' :
+                ''
+              }
+            </p>
           </div>
           <div className="mb-6">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
