@@ -16,21 +16,26 @@ export default function SignUp() {
   const [error, setError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [passwordCondition, setPasswordCondition] = useState(false);
-  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+  const [passwordMatch, setPasswordMatch] = useState(false);
   const hasDigit = /(?=.*\d)/;
   const [digit, setDigit] = useState(false);
   const hasLowercase = /(?=.*[a-z])/;
   const [lowercase, setLowercase] = useState(false);
   const hasUppercase = /(?=.*[A-Z])/;
   const [uppercase, setUppercase] = useState(false);
-  const hasLetter = /(?=.*[a-zA-Z])/;
-  const [letter, setLetter] = useState(false);
   const minLength = /.{8,}/;     
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
   const [length, setLength] = useState(false);
+  const [passRequirements, setPassRequirements] = useState(false);
   const router = useRouter();
 
   const fetchSignUp = async (id: string, username: string, email:string, password: string) => {
     try {
+        if(!passwordRegex.test(passTester)) {
+          setPassRequirements(true);
+          return;
+        }
+
         const response = await fetch('http://localhost:3001/users', {
           method: 'POST',
           headers: {
@@ -44,6 +49,7 @@ export default function SignUp() {
           return;
         }
         const data = await response.json();
+        router.push('/auth/login');
         console.log("everything was successful", data);
         return data;
     } catch (e) {
@@ -61,21 +67,6 @@ export default function SignUp() {
       setError(false)
     }, 5000));
   },[error])
-  
-  const handleSubmit = async(e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    try{
-      if(passTester === confirmPassword){
-        await fetchSignUp(generateIdentifier(), username, email, passTester)
-      }else {
-        setPasswordError(true);
-        console.log('Passwords do not match');
-        return;
-      }
-    } catch(e){
-      console.error('Error:', e);
-    }
-  };
 
   const handlePasswordChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     const value = e.target.value;
@@ -84,12 +75,27 @@ export default function SignUp() {
     setDigit(hasDigit.test(value as string));
     setLowercase(hasLowercase.test(value as string));
     setUppercase(hasUppercase.test(value as string));
-    setLetter(hasLetter.test(value as string));
     setLength(minLength.test(value as string));
 
     setPasswordCondition(!passwordRegex.test(value as string) && value !== '');
   };
-  
+
+  const handleSubmit = async(e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try{
+      if( passTester === confirmPassword){
+        console.log('Conditions met, sending request');
+        await fetchSignUp(generateIdentifier(), username, email, passTester)
+      }else {
+        setPasswordError(true);
+        console.log('Passwords do not match or do not met the requirements');
+        return;
+      }
+    } catch(e){
+      console.error('Error:', e);
+    }
+  };
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   }
@@ -190,7 +196,7 @@ export default function SignUp() {
                 {showConfirmPassword ? <FaRegEye /> : <IoEyeOffOutline />}
               </button>
             </div>
-            {passwordError && <p className="text-red-500 text-xs italic">Passwords do not match</p>}
+            {passwordError ? <p className="text-red-500 text-xs italic">Passwords do not match</p> : confirmPassword === '' ? '' : passRequirements  ? <p className="text-red-500 text-xs italic">Password does not meet the requirements</p> : ''}
           </div>
           <button
             type="submit"
