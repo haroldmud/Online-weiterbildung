@@ -11,10 +11,10 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
     try {
-      // createUserDto.password = await bcrypt.hash(
-      //   createUserDto.password,
-      //   roundOfHashing,
-      // );
+      createUserDto.password = await bcrypt.hash(
+        createUserDto.password,
+        roundOfHashing,
+      );
       return this.prisma.user.create({ data: createUserDto });
     } catch (e) {
       console.error('Error:', e);
