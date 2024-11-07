@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -10,6 +10,7 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false);
   const Logged = useStore(state => state.isLogged);
   const loggininStore = useStore(state => state.signinIn);
   const setUsernameStore = useStore(state => state.setUsername);
@@ -39,13 +40,23 @@ export default function Login() {
       localStorage.setItem('username', username);
       const getUsername: string | null = localStorage.getItem('username');
       setUsernameStore(getUsername || '');
-      console.log(data);
-      console.log(Logged)
-      if(data.accessToken) {router.push("/"); loggininStore()}
+      if(data.accessToken) {router.push("/"); loggininStore()} else {setError(true)}
     }catch(e){
-      console.error('Error:', e);
+      if((e as Error).toString().split(':')[0] === 'SyntaxError') {
+          setError(true);
+      }
     }
   };
+
+  useEffect(() => {
+    if(error) {
+      setTimeout(()=> setError(false), 5000);
+    }
+
+    return () => {
+      clearTimeout(setTimeout(()=> setError(false), 5000));
+    }
+  }, [error]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 relative">
@@ -88,6 +99,7 @@ export default function Login() {
               </button>
             </div>
           </div>
+          {error && <p className="text-red-500 text-xs italic pb-5">Invalid username or password, please try again!</p>}
           <button
             type="submit"
             className="w-full py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
