@@ -11,7 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
-  const Logged = useStore(state => state.isLogged);
+  // const Logged = useStore(state => state.isLogged);
   const loggininStore = useStore(state => state.signinIn);
   const setUsernameStore = useStore(state => state.setUsername);
   const router = useRouter();
