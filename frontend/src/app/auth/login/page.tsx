@@ -11,7 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
-  const Logged = useStore(state => state.isLogged);
+  // const Logged = useStore(state => state.isLogged);
   const loggininStore = useStore(state => state.signinIn);
   const setUsernameStore = useStore(state => state.setUsername);
   const router = useRouter();
@@ -108,7 +108,7 @@ export default function Login() {
           </button>
         </form>
         <p className="mt-4 text-center">
-                Don't have an account?{' '}<a href="/auth/signup" className="text-red-500 hover:underline">Sign up here</a>.
+          Don't have an account?{' '}<a href="/auth/signup" className="text-red-500 hover:underline">Sign up here</a>.
         </p>
       </div>
       
