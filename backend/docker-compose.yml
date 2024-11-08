@@ -6,7 +6,8 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=formation
-      - POSTGRES_PASSWORD=formationPassword
+      # - POSTGRES_PASSWORD=formationPassword
+      - POSTGRES_PASSWORD=CQb9Jif2lInEKGRLVBPNAJAEsUooxRf9
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:

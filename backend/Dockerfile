@@ -14,10 +14,8 @@ RUN npm install
 COPY . .
 
 # Set environment variables for connecting to PostgreSQL (replace values as needed)
-ENV POSTGRES_USER=formation
-ENV POSTGRES_PASSWORD=formationPassword
-ENV POSTGRES_HOST=db
-ENV POSTGRES_PORT=5432
+ENV DATABASE_URL="postgresql://formation:CQb9Jif2lInEKGRLVBPNAJAEsUooxRf9@dpg-csmvm0g8fa8c73acvtq0-a.oregon-postgres.render.com/formation_i2yk"
+
 
 # Expose the application's port (e.g., 3000)
 EXPOSE 3000
