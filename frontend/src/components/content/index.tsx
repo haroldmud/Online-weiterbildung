@@ -8,10 +8,6 @@ import {
   useState,
 } from "react";
 
-// interface CreateFormationExtended extends CreateFormationDto {
-//   id: string;
-// }
-
 const Content = () => {
   const [formation, setFormation] = useState<any | []>(
     []
@@ -41,7 +37,7 @@ const Content = () => {
     <div className="flex items-center justify-center min-h-screen ">
       <div className="w-24 h-24 border-8 border-red-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
-  ) : error ? (
+  ) : formation.length === 0 && error ? (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
         <div className="text-red-500 text-2xl font-bold">Error</div>
