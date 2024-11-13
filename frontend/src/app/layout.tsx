@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useState } from "react";
+import { SessionProvider } from "next-auth/react";
 import GlobeComp from "@/components/globe";
 
 const geistSans = localFont({
@@ -19,9 +20,10 @@ const geistMono = localFont({
 });
 
 export default function RootLayout({
-  children,
+  children, session
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode,
+  session: any
 }>) {
   const [selected, setSelected] = useState("all");
   return (
@@ -29,20 +31,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <section className="flex flex-col justify-between h-[100vh]">
-        {/* <section>
-         <GlobeComp selected={selected} />
-        </section> */}
-        <section>
-          <Header />
-        </section>
-        <section className="flex justify-center">
-          <section className="max-w-[1000px] w-full">
-           {children}
+        <SessionProvider session={session}>
+          <section className="flex flex-col justify-between h-[100vh]">
+            {/* <section>
+              <GlobeComp selected={selected} />
+            </section> */}
+            <section>
+              <Header />
+            </section>
+            <section className="flex justify-center">
+              <section className="max-w-[1000px] w-full">
+                {children}
+              </section>
+            </section>
+            <Footer />
           </section>
-        </section>
-        <Footer />
-      </section>
+        </SessionProvider>
       </body>
     </html>
   );
