@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -40,7 +41,11 @@ export default function Login() {
       localStorage.setItem('username', username);
       const getUsername: string | null = localStorage.getItem('username');
       setUsernameStore(getUsername || '');
-      if(data.accessToken) {router.push("/"); loggininStore()} else {setError(true)}
+      if(data.accessToken) {
+        router.push("/"); 
+        loggininStore()
+        signIn();
+      } else {setError(true)}
     }catch(e){
       if((e as Error).toString().split(':')[0] === 'SyntaxError') {
           setError(true);

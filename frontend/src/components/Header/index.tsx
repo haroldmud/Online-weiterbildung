@@ -1,11 +1,13 @@
 "use client"
 
 import Button from "../ui/Button";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import useStore from "@/zustand/store";
 import { useRouter } from "next/navigation";
 
 const Header =()=> {
+  const {data: session} = useSession();
   const menuRef = useRef(null); 
   const headerRef = useRef(null);
   const [show, setShow] = useState(false);
@@ -20,20 +22,21 @@ const Header =()=> {
   const loggout = () => {
     isLoggedOut();
     router.push('/');
+    if(session) signOut();
     localStorage.removeItem('token');
     localStorage.removeItem('username');
   }
   
-  const featchUsername = async () => {
-    const response = await fetch(`http://localhost:3000/api/users/${username}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-    const data = await response.json();
-  }
+  // const featchUsername = async () => {
+  //   const response = await fetch(`http://localhost:3000/api/users/${username}`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'authorization': `Bearer ${localStorage.getItem('token')}`
+  //     }
+  //   })
+  //   const data = await response.json();
+  // }
   
   useEffect(() => {;
     if(localStorage.getItem('token')){
