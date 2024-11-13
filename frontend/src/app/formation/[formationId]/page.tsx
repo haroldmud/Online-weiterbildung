@@ -57,12 +57,12 @@ const FormationDetails = ({ params }: FormationDetailsProps) => {
 
   return (
     <section className="mt-8">
-      <button onClick={() => router.back()} className="text-4xl font-bold mb-4" title="Go back">
+      <button onClick={() => router.back()} className="text-4xl font-bold mb-4 xl:ml-0 ml-4" title="Go back">
         <IoIosArrowRoundBack />
       </button>
 
       {error ? (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg flex flex-col items-center gap-2">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-6 pb-4 rounded-lg flex flex-col items-center gap-2">
           <MdErrorOutline className="text-6xl" />
           <p className="text-lg font-semibold">{error} or you are not <mark className="inline underline hover:text-red-600"><a href="/auth/login">logged in</a></mark> yet!</p>
           <a
@@ -73,13 +73,13 @@ const FormationDetails = ({ params }: FormationDetailsProps) => {
           </a>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
-          <div className="py-10 w-9/12">
+        <div className="flex flex-col gap-4 mb-16">
+          <div className="py-10 xl:w-9/12 xl:px-0 px-4">
             <a href="#" className="text-4xl hover:underline">{formation?.title}</a>
-            <img className="h-[22rem] w-full object-cover rounded-md" src={formation?.image} alt="content image" />
+            <img className="h-[22rem] w-full object-cover rounded-md mt-4" src={formation?.image} alt="content image" />
           </div>
 
-          <div className="flex items-center w-6/12 text-gray-500">
+          <div className="flex items-center xl:w-6/12 xl:px-0 px-4 text-gray-500 -mt-8">
             <div className="flex flex-col gap-4">
               <p className="text-red-600 text-sm">
                 {formation?.price}{" € ou 2 paiements mensuel de"}{" "}{formation?.wholesalePrice}{" €"}
