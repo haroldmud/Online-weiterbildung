@@ -8,22 +8,17 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
-  // pages: {
-  //   signIn: "/auth/login",
-  // },
-  // callbacks: {
-  //   async signIn(user, account, profile) {
-  //     return true;
-  //   },
-  //   async redirect(url, baseUrl) {
-  //     return url.startsWith(baseUrl) ? url : baseUrl;
-  //   },
-  //   async session(session, user) {
-  //     return session;
-  //   },
-  //   async jwt(token, user, account, profile, isNewUser) {
-  //     return token;
-  //   },
+  callbacks: {
+    async jwt({token, user, account}: {token: any, user: any, account: any}) { // user parameter should be there according to the documentation yet it's not used
+      if(account) {
+        token.accessToken = account.accessToken;
+      }
+      return token;
+    },
+    async session({session, token, user}: {session: any, token: any, user: any}) { //user parameter should be there according to the documentation yet it's not used  
+      session.accessToken = token.accessToken;
+      return session;
+    }
   }
-
+}
   export default NextAuth(authOptions);
