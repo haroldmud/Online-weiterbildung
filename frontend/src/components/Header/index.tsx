@@ -2,12 +2,12 @@
 
 import Button from "../ui/Button";
 import { useEffect, useRef, useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+// import { useSession, signOut } from "next-auth/react";
 import useStore from "@/zustand/store";
 import { useRouter } from "next/navigation";
 
 const Header =()=> {
-  const {data: session} = useSession();
+  // const {data: session} = useSession();
   const menuRef = useRef(null); 
   const headerRef = useRef(null);
   const [show, setShow] = useState(false);
@@ -22,7 +22,7 @@ const Header =()=> {
   const loggout = () => {
     isLoggedOut();
     router.push('/');
-    if(session) signOut();
+    // signOut();
     localStorage.removeItem('token');
     localStorage.removeItem('username');
   }

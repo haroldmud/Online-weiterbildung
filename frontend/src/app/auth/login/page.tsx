@@ -1,6 +1,5 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { IoEyeOffOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -44,7 +43,6 @@ export default function Login() {
       if(data.accessToken) {
         router.push("/"); 
         loggininStore()
-        signIn();
       } else {setError(true)}
     }catch(e){
       if((e as Error).toString().split(':')[0] === 'SyntaxError') {
@@ -112,6 +110,12 @@ export default function Login() {
             Login
           </button>
         </form>
+          <button
+            type="button"
+            onClick={() => router.push('/auth/loginTest')}
+            className="w-full py-2 my-2 border border-red-500 hover:text-white text-red-600 font-semibold rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >Login with Github
+          </button>
         <p className="mt-4 text-center">
           Don't have an account?{' '}<a href="/auth/signup" className="text-red-500 hover:underline">Sign up here</a>.
         </p>
