@@ -1,24 +1,14 @@
+//[...nextAuth].ts
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
+import Github from "next-auth/providers/github";
 
 export const authOptions = {
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    Github({
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
     }),
   ],
-  callbacks: {
-    async jwt({token, user, account}: {token: any, user: any, account: any}) { // user parameter should be there according to the documentation yet it's not used
-      if(account) {
-        token.accessToken = account.accessToken;
-      }
-      return token;
-    },
-    async session({session, token, user}: {session: any, token: any, user: any}) { //user parameter should be there according to the documentation yet it's not used  
-      session.accessToken = token.accessToken;
-      return session;
-    }
-  }
+  secret: process.env.JWT_SECRET,
 }
   export default NextAuth(authOptions);
