@@ -1,25 +1,59 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { generateSecureToken } from 'src/utils';
 import * as bcrypt from 'bcrypt';
 
 export const roundOfHashing = 10;
 
 @Injectable()
 export class UsersService {
+  [x: string]: any;
   constructor(private prisma: PrismaService) {}
   async create(createUserDto: CreateUserDto) {
     try {
+      if (await this.isEmailTaken(createUserDto.email)) {
+        throw new BadRequestException('Email is already taken');
+      }
+
       createUserDto.password = await bcrypt.hash(
         createUserDto.password,
         roundOfHashing,
       );
-      return this.prisma.user.create({ data: createUserDto });
+      const createdUser = this.prisma.user.create({ data: createUserDto });
+      const emailVerificationToken = generateSecureToken();
+      // Update user record with the verification token
+      await this.prisma.user.update({
+        where: { id: (await createdUser).id },
+        data: { emailVerificationToken },
+      });
+      return createdUser;
     } catch (e) {
       console.error('Error:', e);
       throw new InternalServerErrorException('user creation failed');
     }
+  }
+
+  async verifyEmail(token: string) {
+    // Find user by email verification token
+    const user = await this.prisma.user.findFirst({
+      where: { emailVerificationToken: token },
+    });
+
+    if (!user) {
+      throw new BadRequestException('Invalid or Expired token');
+    }
+
+    // Update user record to mark the email as verified
+    return this.prisma.user.update({
+      where: { id: user.id },
+      data: { emailVerified: true, emailVerificationToken: '' },
+    });
   }
 
   async findByUsername(username: string): Promise<CreateUserDto> {
@@ -27,7 +61,11 @@ export class UsersService {
     if (!user) {
       throw new InternalServerErrorException('user not found');
     }
-    return user;
+    return {
+      ...user,
+      emailVerificationToken: user.emailVerificationToken || '',
+      emailVerified: user.emailVerified || false,
+    };
   }
 
   findAll() {
