@@ -5,6 +5,7 @@ import { FaRegEye } from "react-icons/fa";
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import { generateIdentifier } from '@/helpers/identifier';
+import { registerUser } from '@/actions/auth-actions';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -36,13 +37,7 @@ export default function SignUp() {
           return;
         }
 
-        const response = await fetch('http://localhost:3001/users', {
-          method: 'POST',
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({id, username, email, password}),
-        })
+        const response = await registerUser({ id, username, email, password });
         if (!response.ok) {
           console.error('Something went wrong, status:', response.status);
           setError(true)

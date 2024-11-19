@@ -1,13 +1,13 @@
 import { Html, Body, Button, Container, Head, Hr, Text, Preview, Link, Section } from "@react-email/components";
 
 interface VerificationTemplateProps {
-  name: string;
+  username: string;
   emailVerificationToken: string;
 }
 
 const baseUrl = process.env.NEXTAUTH_URL;
 
-const VerificationTemplate = ({ name, emailVerificationToken }: VerificationTemplateProps) => (
+const VerificationTemplate = ({ username, emailVerificationToken }: VerificationTemplateProps) => (
   <Html>
     <Head>
       <Preview>Verify your email address</Preview>
@@ -20,7 +20,7 @@ const VerificationTemplate = ({ name, emailVerificationToken }: VerificationTemp
               color: "#333",
               marginBottom: "16px",
             }}
-          >Welcome to Weiterbildung {name}!</Text>
+          >Welcome to Weiterbildung {username}!</Text>
           <Text>
             Please click on the link below to verify your email address:
           </Text>

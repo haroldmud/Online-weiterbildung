@@ -24,6 +24,11 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @Get('verify-email/:token')
+  verifyEmail(@Param('token') token: string) {
+    return this.usersService.verifyEmail(token);
+  }
+
   @Get()
   // @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()
