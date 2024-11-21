@@ -37,7 +37,7 @@ export default function SignUp() {
           return;
         }
 
-        const response = await registerUser({ id, username, email, password });
+        const response = await registerUser({ id, username, email, password }); 
         if (!response.ok) {
           console.error('Something went wrong, status:', response.status);
           setError(true)
