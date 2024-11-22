@@ -45,7 +45,7 @@ export class AuthService {
         accessToken: this.jwtService.sign({ userId: user.id }),
       };
     } catch (e) {
-      console.error('Error:', e);
+      console.error('The found Error is:', e);
     }
   }
 
