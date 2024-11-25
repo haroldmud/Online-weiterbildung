@@ -13,31 +13,32 @@ const Content = () => {
     []
   );
   const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    try {
-      const featchData = async () => {
+    const featchData = async () => {
+        try {
         const response = await fetch("http://localhost:3001/formation");
         if (!response.ok) {
-          setError(true);
           throw new Error("Something went wrong");
-        }
+        } 
         const data = await response.json();
         setFormation(data);
+        } catch (error) {
+          console.log(error);
+          setError(true);
+        } finally { 
+          setLoading(false);
       };
-
-      featchData();
-    } catch (error) {
-      console.log(error);
-      setError(true);
     }
+    featchData();
   }, []);
 
-  return formation.length === 0 && !error ? (
+  return loading ? (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="w-24 h-24 border-8 border-red-500 border-t-transparent rounded-full animate-spin"></div>
     </div>
-  ) : formation.length === 0 && error ? (
+  ) :  error ? (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
         <div className="text-red-500 text-2xl font-bold">Error</div>
