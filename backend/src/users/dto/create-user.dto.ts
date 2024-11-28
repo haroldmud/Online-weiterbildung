@@ -10,4 +10,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   readonly role?: string;
+  @IsOptional()
+  emailVerificationToken: string; // <-- This field should be optional
+  @IsOptional()
+  emailVerified: boolean;
 }
